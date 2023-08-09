@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react'; // Import React as well
 import { Link, useNavigate } from 'react-router-dom';
 
-import "../styles/form.css";
+import '../styles/form.css';
 
 function Home() {
     const navigation = useNavigate();
     const [formValues, setFormValues] = useState({
-        nom: "",
-        email: "",
+        nom: '',
+        email: '',
         image: null,
     });
 
@@ -23,8 +23,8 @@ function Home() {
 
     const resetForm = () => {
         setFormValues({
-            nom: "",
-            email: "",
+            nom: '',
+            email: '',
             image: null,
         });
     };
@@ -35,22 +35,21 @@ function Home() {
 
     const handleSign = async (e) => {
         e.preventDefault();
-        const response=await fetch('http://localhost:8085/addPhoto', {
+        const response = await fetch('http://localhost:8085/addPhoto', {
             method: 'POST',
             body: JSON.stringify(formValues),
             headers: {
                 'Content-Type': 'application/json',
-                 Accept:"application/json",
-                "Access-Control-Allow-Origin":"*"
-            }
-        })
-       if(response.status===200){
-         alert('Enregistrement reussi')
-       }else{
-        alert('Enregistrement reussi')
-       }
+                Accept: 'application/json',
+            },
+        });
+        console.log('reponse',response)
+        if (response.status === 200) {
+            alert('Enregistrement réussi');
+        } else {
+            alert('Erreur lors de l\'enregistrement');
+        }
         resetForm();
-        console.log('test',formValues)
     };
 
     const baseImage = (e) => {
@@ -72,61 +71,60 @@ function Home() {
             });
         }
     };
-    // const fetchAllData = async () => {
-    //     try {
-    //         const response = await fetch('http://localhost:8082/allData', {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             }
-    //         });
-
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             console.log(data);  // Affichez les données dans la console (ou faites autre chose avec les données)
-    //         } else {
-    //             console.error('Erreur lors de la récupération des données');
-    //         }
-    //     } catch (error) {
-    //         console.error('Erreur lors de la requête:', error);
-    //     }
-    // };
+    const fetchAllData = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8085/allData', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            console.log('reponse',response)
+            if (response.status === 200) {
+                alert('Envoi réussi');
+            } else {
+                alert('Erreur lors de l\'envoi');
+            }
+        } catch (error) {
+            console.error('Error while fetching data:', error.message);
+        }
+    };
+    
+    
+    
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-                <h1 className="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Enregistrement</h1>
-                <form onSubmit={handleSign}>
-                    <div className="mb-6">
-                        <label htmlFor="nom" className="block mb-2 text-sm text-gray-600">Nom</label>
-                        <input type="text" id="nom" name="nom" value={nom} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={handleChange} />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="email" className="block mb-2 text-sm text-gray-600">Email</label>
-                        <input type="email" id="email" name="email" value={email} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={handleChange} />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block mb-2 text-sm text-gray-600">Photo</label>
-                        <input type="file" id="image" name="image" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={baseImage} />
-                    </div>
-                    <div className="m-6">
-                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
-                        Enregistrer
-                        </button>
+        <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+            <h1 className="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Enregistrement</h1>
+            <form >
+                <div className="mb-6">
+                    <label htmlFor="nom" className="block mb-2 text-sm text-gray-600">Nom</label>
+                    <input type="text" id="nom" name="nom" value={nom} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={handleChange} />
+                </div>
+                <div className="mb-6">
+                    <label htmlFor="email" className="block mb-2 text-sm text-gray-600">Email</label>
+                    <input type="email" id="email" name="email" value={email} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={handleChange} />
+                </div>
+                <div className="mb-6">
+                    <label className="block mb-2 text-sm text-gray-600">Photo</label>
+                    <input type="file" id="image" name="image" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required onChange={baseImage} />
+                </div>
+                <div className="m-6">
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4" onClick={handleSign}>
+                    Enregistrer
+                    </button>
 
-                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Envoyer
-                        </button>
-                    </div>
-                </form>
-                
-            </div>
-            {/* <div className="m-6">
-                <button onClick={fetchAllData} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Afficher toutes les données
-                </button>
-            </div> */}
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={fetchAllData}>
+                        Envoyer
+                    </button>
+                </div>
+            </form>
+            
         </div>
+    </div>
     );
 }
 
